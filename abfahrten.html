@@ -4,11 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Abfahrten - RIS Info</title>
-    <link rel="stylesheet" href="style.css">
     <style>
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             padding: 2rem;
         }
 
@@ -18,11 +20,12 @@
         }
 
         table {
-            width: 100%;
+            width: 90%;
+            max-width: 600px;
             border-collapse: collapse;
-            margin: auto;
             background-color: white;
             box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+            margin-bottom: 1.5rem;
         }
 
         th, td {
@@ -41,9 +44,7 @@
         }
 
         .logout-btn {
-            display: block;
-            margin: 1.5rem auto;
-            padding: 0.5rem 1rem;
+            padding: 0.5rem 1.5rem;
             background-color: #cc0000;
             color: white;
             border: none;
@@ -69,29 +70,38 @@
             </tr>
         </thead>
         <tbody id="abfahrten-table">
-            <!-- Daten werden hier dynamisch eingefügt -->
+            <!-- Abfahrten werden hier eingefügt -->
         </tbody>
     </table>
 
     <button class="logout-btn" onclick="logout()">Logout</button>
 
     <script>
-        // Beispiel-Abfahrten (später durch echte Daten ersetzen)
-        const abfahrten = [
-            { linie: "101", ziel: "Nordstadt", abfahrt: "08:15", gleis: "1" },
-            { linie: "102", ziel: "Südhafen", abfahrt: "08:30", gleis: "2" },
-            { linie: "103", ziel: "Ostpark", abfahrt: "08:45", gleis: "3" },
-            { linie: "104", ziel: "Westtor", abfahrt: "09:00", gleis: "1" }
-        ];
+        // Sicherstellen, dass das Script nach dem Laden des DOM ausgeführt wird
+        document.addEventListener("DOMContentLoaded", function() {
 
-        const tableBody = document.getElementById("abfahrten-table");
+            // Beispiel-Abfahrten
+            const abfahrten = [
+                { linie: "101", ziel: "Nordstadt", abfahrt: "08:15", gleis: "1" },
+                { linie: "102", ziel: "Südhafen", abfahrt: "08:30", gleis: "2" },
+                { linie: "103", ziel: "Ostpark", abfahrt: "08:45", gleis: "3" },
+                { linie: "104", ziel: "Westtor", abfahrt: "09:00", gleis: "1" }
+            ];
 
-        abfahrten.forEach(a => {
-            const row = document.createElement("tr");
-            row.innerHTML = `<td>${a.linie}</td><td>${a.ziel}</td><td>${a.abfahrt}</td><td>${a.gleis}</td>`;
-            tableBody.appendChild(row);
+            const tableBody = document.getElementById("abfahrten-table");
+
+            // Tabelle füllen
+            abfahrten.forEach(a => {
+                const row = document.createElement("tr");
+                row.innerHTML = `<td>${a.linie}</td><td>${a.ziel}</td><td>${a.abfahrt}</td><td>${a.gleis}</td>`;
+                tableBody.appendChild(row);
+            });
         });
 
         // Logout-Funktion → zurück zum Login
         function logout() {
             window.location.href = "login.html";
+        }
+    </script>
+</body>
+</html>
