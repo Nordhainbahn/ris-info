@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Abfahrten - RIS Info</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 2rem;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: auto;
+            background-color: white;
+            box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+        }
+
+        th, td {
+            padding: 0.75rem;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #0066cc;
+            color: white;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .logout-btn {
+            display: block;
+            margin: 1.5rem auto;
+            padding: 0.5rem 1rem;
+            background-color: #cc0000;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .logout-btn:hover {
+            background-color: #990000;
+        }
+    </style>
+</head>
+<body>
+    <h1>Abfahrten - NordhainBahn</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Linie</th>
+                <th>Ziel</th>
+                <th>Abfahrt</th>
+                <th>Gleis</th>
+            </tr>
+        </thead>
+        <tbody id="abfahrten-table">
+            <!-- Daten werden hier dynamisch eingefügt -->
+        </tbody>
+    </table>
+
+    <button class="logout-btn" onclick="logout()">Logout</button>
+
+    <script>
+        // Beispiel-Abfahrten (später durch echte Daten ersetzen)
+        const abfahrten = [
+            { linie: "101", ziel: "Nordstadt", abfahrt: "08:15", gleis: "1" },
+            { linie: "102", ziel: "Südhafen", abfahrt: "08:30", gleis: "2" },
+            { linie: "103", ziel: "Ostpark", abfahrt: "08:45", gleis: "3" },
+            { linie: "104", ziel: "Westtor", abfahrt: "09:00", gleis: "1" }
+        ];
+
+        const tableBody = document.getElementById("abfahrten-table");
+
+        abfahrten.forEach(a => {
+            const row = document.createElement("tr");
+            row.innerHTML = `<td>${a.linie}</td><td>${a.ziel}</td><td>${a.abfahrt}</td><td>${a.gleis}</td>`;
+            tableBody.appendChild(row);
+        });
+
+        // Logout-Funktion → zurück zum Login
+        function logout() {
+            window.location.href = "login.html";
