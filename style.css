@@ -4,15 +4,18 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    min-height: 100vh;
+    margin: 0;
+    padding: 1rem;
 }
 
-.login-container {
+.login-container, .page-container {
     background-color: white;
     padding: 2rem;
     border-radius: 10px;
     box-shadow: 0px 0px 10px rgba(0,0,0,0.2);
-    width: 300px;
+    width: 320px;
+    max-width: 100%;
 }
 
 h1 {
@@ -20,30 +23,58 @@ h1 {
     margin-bottom: 1.5rem;
 }
 
-label {
-    display: block;
-    margin-top: 1rem;
-}
-
-input {
+input, select, button, textarea {
     width: 100%;
     padding: 0.5rem;
     margin-top: 0.25rem;
+    margin-bottom: 1rem;
     border-radius: 5px;
     border: 1px solid #ccc;
+    box-sizing: border-box;
 }
 
 button {
-    width: 100%;
-    margin-top: 1.5rem;
-    padding: 0.5rem;
     background-color: #0066cc;
     color: white;
     border: none;
-    border-radius: 5px;
     cursor: pointer;
 }
 
 button:hover {
     background-color: #004999;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+
+th, td {
+    padding: 0.5rem;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color: #0066cc;
+    color: white;
+}
+
+tr:hover {
+    background-color: #f1f1f1;
+}
+
+.logout-btn {
+    background-color: #cc0000;
+    color: white;
+    border: none;
+    padding: 0.5rem 1.5rem;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 1rem;
+}
+
+.logout-btn:hover {
+    background-color: #990000;
 }
