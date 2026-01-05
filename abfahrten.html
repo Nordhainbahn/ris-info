@@ -1,65 +1,14 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Abfahrten - RIS Info</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 2rem;
-        }
-
-        h1 {
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-
-        table {
-            width: 90%;
-            max-width: 600px;
-            border-collapse: collapse;
-            background-color: white;
-            box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
-            margin-bottom: 1.5rem;
-        }
-
-        th, td {
-            padding: 0.75rem;
-            text-align: center;
-            border-bottom: 1px solid #ddd;
-        }
-
-        th {
-            background-color: #0066cc;
-            color: white;
-        }
-
-        tr:hover {
-            background-color: #f1f1f1;
-        }
-
-        .logout-btn {
-            padding: 0.5rem 1.5rem;
-            background-color: #cc0000;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        .logout-btn:hover {
-            background-color: #990000;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Abfahrten - RIS Info</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
+<div class="page-container">
     <h1>Abfahrten - NordhainBahn</h1>
-
     <table>
         <thead>
             <tr>
@@ -67,41 +16,52 @@
                 <th>Ziel</th>
                 <th>Abfahrt</th>
                 <th>Gleis</th>
+                <th>Status</th>
+                <th>Verspätung</th>
+                <th>Info</th>
             </tr>
         </thead>
         <tbody id="abfahrten-table">
-            <!-- Abfahrten werden hier eingefügt -->
+            <!-- Abfahrten dynamisch -->
         </tbody>
     </table>
-
     <button class="logout-btn" onclick="logout()">Logout</button>
+</div>
 
-    <script>
-        // Sicherstellen, dass das Script nach dem Laden des DOM ausgeführt wird
-        document.addEventListener("DOMContentLoaded", function() {
+<script>
+document.addEventListener("DOMContentLoaded", function(){
 
-            // Beispiel-Abfahrten
-            const abfahrten = [
-                { linie: "101", ziel: "Nordstadt", abfahrt: "08:15", gleis: "1" },
-                { linie: "102", ziel: "Südhafen", abfahrt: "08:30", gleis: "2" },
-                { linie: "103", ziel: "Ostpark", abfahrt: "08:45", gleis: "3" },
-                { linie: "104", ziel: "Westtor", abfahrt: "09:00", gleis: "1" }
-            ];
+    const today = new Date().toISOString().split("T")[0]; // yyyy-mm-dd
+    let allData = JSON.parse(localStorage.getItem("abfahrtenData") || "{}");
+    if(!allData[today]){
+        // Beispiel-Daten für den Tag, wenn leer
+        allData[today] = [
+            {linie:"101", ziel:"Nordstadt", abfahrt:"08:15", gleis:"1", ausgefallen:false, verspätung:0, grund:"", info:""},
+            {linie:"102", ziel:"Südhafen", abfahrt:"08:30", gleis:"2", ausgefallen:false, verspätung:0, grund:"", info:""}
+        ];
+        localStorage.setItem("abfahrtenData", JSON.stringify(allData));
+    }
 
-            const tableBody = document.getElementById("abfahrten-table");
+    const tableBody = document.getElementById("abfahrten-table");
+    allData[today].forEach(a => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+            <td>${a.linie}</td>
+            <td>${a.ziel}</td>
+            <td>${a.abfahrt}</td>
+            <td>${a.gleis}</td>
+            <td>${a.ausgefallen ? "Ausgefallen" : "Planmäßig"}</td>
+            <td>${a.verspätung > 0 ? a.verspätung + " min ("+a.grund+")" : "-"}</td>
+            <td>${a.info || "-"}</td>
+        `;
+        tableBody.appendChild(row);
+    });
+});
 
-            // Tabelle füllen
-            abfahrten.forEach(a => {
-                const row = document.createElement("tr");
-                row.innerHTML = `<td>${a.linie}</td><td>${a.ziel}</td><td>${a.abfahrt}</td><td>${a.gleis}</td>`;
-                tableBody.appendChild(row);
-            });
-        });
-
-        // Logout-Funktion → zurück zum Login
-        function logout() {
-            window.location.href = "login.html";
-        }
-    </script>
+function logout(){
+    localStorage.removeItem("currentUser");
+    window.location.href="login.html";
+}
+</script>
 </body>
 </html>
