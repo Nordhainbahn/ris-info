@@ -25,31 +25,26 @@
         </thead>
         <tbody id="admin-table"></tbody>
     </table>
+    <button onclick="addFahrt()">Neue Fahrt hinzufügen</button>
     <button class="logout-btn" onclick="logout()">Logout</button>
 </div>
 
 <script>
 document.addEventListener("DOMContentLoaded", function(){
-
-    // Check if admin
     const user = JSON.parse(localStorage.getItem("currentUser") || "{}");
-    if(!user || user.role !== "admin") {
-        alert("Nur Admins dürfen diese Seite nutzen!");
-        window.location.href="login.html";
-        return;
-    }
+    if(!user || user.role !== "admin"){ window.location.href="login.html"; return; }
 
     const today = new Date().toISOString().split("T")[0];
     let allData = JSON.parse(localStorage.getItem("abfahrtenData") || "{}");
-    if(!allData[today]){
-        allData[today] = [];
-    }
+    if(!allData[today]) allData[today] = [];
+
     const tableBody = document.getElementById("admin-table");
 
     function renderTable(){
         tableBody.innerHTML = "";
         allData[today].forEach((a,index)=>{
             const row = document.createElement("tr");
+            row.id = `row-${index}`;
             row.innerHTML = `
                 <td>${a.linie}</td>
                 <td>${a.ziel}</td>
@@ -65,8 +60,6 @@ document.addEventListener("DOMContentLoaded", function(){
         });
     }
 
-    renderTable();
-
     window.save = function(index){
         const a = allData[today][index];
         a.gleis = document.getElementById(`gleis-${index}`).value;
@@ -76,7 +69,19 @@ document.addEventListener("DOMContentLoaded", function(){
         a.info = document.getElementById(`info-${index}`).value;
 
         localStorage.setItem("abfahrtenData", JSON.stringify(allData));
-        alert("Änderung gespeichert!");
+
+        // Zeile rot hervorheben
+        const row = document.getElementById(`row-${index}`);
+        row.style.backgroundColor = "#ffcccc";
+        setTimeout(()=>{ row.style.backgroundColor=""; },1500);
+
+        renderTable();
+    }
+
+    window.addFahrt = function(){
+        const neueFahrt = {linie:"", ziel:"", abfahrt:"", gleis:"", ausgefallen:false, verspätung:0, grund:"", info:""};
+        allData[today].push(neueFahrt);
+        localStorage.setItem("abfahrtenData", JSON.stringify(allData));
         renderTable();
     }
 
@@ -85,6 +90,7 @@ document.addEventListener("DOMContentLoaded", function(){
         window.location.href="login.html";
     }
 
+    renderTable();
 });
 </script>
 </body>
