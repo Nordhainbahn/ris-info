@@ -1,53 +1,47 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - RIS Info</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login - RIS Info</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="login-container">
-        <h1>NordhainBahn RIS-Infoplattform</h1>
-        <form id="loginForm">
-            <label for="username">Benutzername:</label>
-            <input type="text" id="username" required>
+<div class="login-container">
+    <h1>NordhainBahn RIS Info</h1>
+    <form id="loginForm">
+        <label for="username">Benutzername:</label>
+        <input type="text" id="username" required>
+        <label for="password">Passwort:</label>
+        <input type="password" id="password" required>
+        <button type="submit">Login</button>
+        <p id="error" style="color:red;"></p>
+    </form>
+</div>
 
-            <label for="password">Passwort:</label>
-            <input type="password" id="password" required>
+<script>
+const accounts = [
+    { username: "fahrer1", password: "passwort123", role: "admin" },
+    { username: "fahrer2", password: "geheim456", role: "user" }
+];
 
-            <button type="submit">Login</button>
-            <p id="error" style="color:red;"></p>
-        </form>
-    </div>
+document.getElementById("loginForm").addEventListener("submit", function(e){
+    e.preventDefault();
+    const user = document.getElementById("username").value;
+    const pass = document.getElementById("password").value;
+    const account = accounts.find(a => a.username === user && a.password === pass);
 
-    <script>
-        // Manuell erstellte Accounts
-        const accounts = [
-            { username: "fahrer1", password: "passwort123" },
-            { username: "Jolicraft", password: "Finn0501" },
-            { username: "fahrer2", password: "geheim456" }
-            // hier weitere Accounts hinzufügen
-        ];
-
-        const form = document.getElementById("loginForm");
-        const errorMsg = document.getElementById("error");
-
-        form.addEventListener("submit", function(e) {
-            e.preventDefault();
-
-            const user = document.getElementById("username").value;
-            const pass = document.getElementById("password").value;
-
-            const account = accounts.find(a => a.username === user && a.password === pass);
-
-            if(account) {
-                // Login erfolgreich → Weiterleitung zur Abfahrtsseite
-                window.location.href = "abfahrten.html";
-            } else {
-                errorMsg.textContent = "Benutzername oder Passwort falsch!";
-            }
-        });
-    </script>
+    if(account){
+        localStorage.setItem("currentUser", JSON.stringify(account));
+        if(account.role === "admin"){
+            window.location.href = "admin.html";
+        } else {
+            window.location.href = "abfahrten.html";
+        }
+    } else {
+        document.getElementById("error").textContent = "Benutzername oder Passwort falsch!";
+    }
+});
+</script>
 </body>
 </html>
