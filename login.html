@@ -56,5 +56,18 @@ document.getElementById("loginForm").addEventListener("submit", function(e){
     }
 });
 </script>
+
+<script>
+function updateDateTime(){
+    const now = new Date();
+    const options = { year: 'numeric', month: '2-digit', day: '2-digit', 
+                      hour: '2-digit', minute: '2-digit', second: '2-digit'};
+    document.getElementById("date-time").textContent = now.toLocaleDateString('de-DE', options);
+}
+
+// Jede Sekunde aktualisieren
+setInterval(updateDateTime, 1000);
+updateDateTime(); // sofort beim Laden
+</script>
 </body>
 </html>
