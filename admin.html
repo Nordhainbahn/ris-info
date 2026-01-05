@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin - RIS Info</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="page-container">
+    <h1>Admin-Tool - NordhainBahn</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Linie</th>
+                <th>Ziel</th>
+                <th>Abfahrt</th>
+                <th>Gleis</th>
+                <th>Ausgefallen</th>
+                <th>Verspätung</th>
+                <th>Grund</th>
+                <th>Info</th>
+                <th>Speichern</th>
+            </tr>
+        </thead>
+        <tbody id="admin-table"></tbody>
+    </table>
+    <button class="logout-btn" onclick="logout()">Logout</button>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function(){
+
+    // Check if admin
+    const user = JSON.parse(localStorage.getItem("currentUser") || "{}");
+    if(!user || user.role !== "admin") {
+        alert("Nur Admins dürfen diese Seite nutzen!");
+        window.location.href="login.html";
+        return;
+    }
+
+    const today = new Date().toISOString().split("T")[0];
+    let allData = JSON.parse(localStorage.getItem("abfahrtenData") || "{}");
+    if(!allData[today]){
+        allData[today] = [];
+    }
+    const tableBody = document.getElementById("admin-table");
+
+    function renderTable(){
+        tableBody.innerHTML = "";
+        allData[today].forEach((a,index)=>{
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                <td>${a.linie}</td>
+                <td>${a.ziel}</td>
+                <td>${a.abfahrt}</td>
+                <td><input type="text" value="${a.gleis}" id="gleis-${index}"></td>
+                <td><input type="checkbox" ${a.ausgefallen ? "checked" : ""} id="ausfall-${index}"></td>
+                <td><input type="number" value="${a.verspätung}" id="verspätung-${index}" min="0"></td>
+                <td><input type="text" value="${a.grund}" id="grund-${index}"></td>
+                <td><input type="text" value="${a.info}" id="info-${index}"></td>
+                <td><button onclick="save(${index})">Speichern</button></td>
+            `;
+            tableBody.appendChild(row);
+        });
+    }
+
+    renderTable();
+
+    window.save = function(index){
+        const a = allData[today][index];
+        a.gleis = document.getElementById(`gleis-${index}`).value;
+        a.ausgefallen = document.getElementById(`ausfall-${index}`).checked;
+        a.verspätung = parseInt(document.getElementById(`verspätung-${index}`).value) || 0;
+        a.grund = document.getElementById(`grund-${index}`).value;
+        a.info = document.getElementById(`info-${index}`).value;
+
+        localStorage.setItem("abfahrtenData", JSON.stringify(allData));
+        alert("Änderung gespeichert!");
+        renderTable();
+    }
+
+    window.logout = function(){
+        localStorage.removeItem("currentUser");
+        window.location.href="login.html";
+    }
+
+});
+</script>
+</body>
+</html>
