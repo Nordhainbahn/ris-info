@@ -78,3 +78,31 @@ tr:hover {
 .logout-btn:hover {
     background-color: #990000;
 }
+
+/* Header */
+.site-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #0066cc;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 10px 10px 0 0;
+    margin-bottom: 1rem;
+    width: 100%;
+    max-width: 1200px;
+    box-sizing: border-box;
+}
+
+.header-left img.logo {
+    height: 50px;
+}
+
+.header-center h1 {
+    margin: 0;
+    font-size: 1.5rem;
+}
+
+.header-right {
+    font-size: 0.85rem;
+}
